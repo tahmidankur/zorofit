@@ -1,0 +1,43 @@
+.progress + .progress {
+  margin-top: 18px;
+}
+
+.progress-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.progress-label {
+  font-weight: 600;
+}
+
+.progress-value {
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.progress-value .muted {
+  font-size: var(--text-base);
+  font-weight: 400;
+}
+
+.progress-track {
+  height: 10px;
+  background: var(--accent-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 200ms ease-out;
+}
+
+.progress-note {
+  margin-top: 6px;
+}

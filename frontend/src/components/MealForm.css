@@ -1,0 +1,61 @@
+.meal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.meal-form-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.meal-form-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.meal-form-row {
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.meal-form-row-head {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.meal-form-name {
+  flex: 1;
+}
+
+.meal-form-numbers {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.meal-form-add {
+  align-self: flex-start;
+  margin-left: -12px;
+}
+
+.meal-form-total {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+
+@media (max-width: 400px) {
+  .meal-form-numbers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

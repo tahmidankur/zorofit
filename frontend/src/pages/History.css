@@ -1,0 +1,12 @@
+.history-day + .history-day {
+  margin-top: 28px;
+}
+
+.history-day-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 12px;
+}
