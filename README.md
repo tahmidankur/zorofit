@@ -97,8 +97,12 @@ To rebuild the food data, download the USDA "Foundation Foods" and "SR Legacy" C
 
 ### Deploy
 
-1. Create a Neon Postgres database and copy its connection string.
-2. In Render, create a Blueprint from this repo (`render.yaml`). Set `DATABASE_URL` (the Neon string), `GEMINI_API_KEY`, and `FRONTEND_ORIGIN` (the static site's URL) on the API, and `VITE_API_URL` (the API's URL) on the static site.
+Live: https://zorofit-web.onrender.com (API: https://zorofit-api.onrender.com).
+
+1. Create a Postgres database. The live app uses Supabase (free plan); Neon works the same way. On Supabase, use the **Session pooler** connection string: the direct connection is IPv6-only, and the transaction pooler breaks psycopg's prepared statements. The API runs the Alembic migrations on startup, and migration `0002` turns on row-level security so Supabase's public REST API can't read the tables.
+2. In Render, create a Blueprint from this repo (`render.yaml`). Set `DATABASE_URL`, `GEMINI_API_KEY`, and `FRONTEND_ORIGIN` (the static site's URL) on the API, and `VITE_API_URL` (the API's URL) on the static site.
+
+Supabase pauses free projects after about a week without activity; restore it from the dashboard if the API starts failing.
 
 ## Data sources and credits
 

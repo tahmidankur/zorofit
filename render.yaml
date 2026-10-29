@@ -1,4 +1,4 @@
-# Render Blueprint: the API and the static frontend. The database lives on Neon (see README).
+# Render Blueprint: the API and the static frontend. The database is external Postgres (Supabase or Neon, see README).
 services:
   - type: web
     name: zorofit-api

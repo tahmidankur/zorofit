@@ -8,7 +8,7 @@ The milestone plan is in PLAN.md. Work on one milestone at a time and stop when 
 
 - Frontend: React + Vite, JavaScript, plain CSS (one `global.css` with CSS variables, plus one CSS file per component). React Router for the four screens. `vite-plugin-pwa` for the manifest and service worker. No UI kit, no Tailwind, no state library.
 - Backend: Python 3.12+, FastAPI, SQLAlchemy 2.0, Pydantic v2, httpx, pytest.
-- App database: SQLite in development, Postgres (Neon free plan) when deployed. Same code, switched by `DATABASE_URL`.
+- App database: SQLite in development, Postgres (Supabase free plan; Neon also works) when deployed. Same code, switched by `DATABASE_URL`.
 - Food reference data: a read-only SQLite file, `backend/data/foods.db`, built from the USDA FoodData Central download files (Foundation Foods + SR Legacy). The app does not call the live USDA API.
 - Exercise data: a hand-picked subset of `yuhonas/free-exercise-db` (public domain), stored in `backend/data/exercises.json`.
 - AI: Google Gemini API, free tier, a Flash-class model. The model name comes from `GEMINI_MODEL` so it can change without code changes. The provider sits behind a small interface so Groq (also free tier) can be swapped in with `LLM_PROVIDER=groq`.
