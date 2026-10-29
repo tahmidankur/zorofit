@@ -1,0 +1,68 @@
+:root {
+  --bg: #F7F6F2;
+  --surface: #FFFFFF;
+  --text: #1D1D1B;
+  --muted: #6B6B66;
+  --border: #E3E1DA;
+  --accent: #2E7D4F;
+  --accent-soft: #E7F0EA;
+  --danger: #B3261E;
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --radius: 8px;
+
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-md: 17px;
+  --text-lg: 22px;
+  --text-xl: 28px;
+
+  --nav-height: 64px;
+  --rail-width: 96px;
+
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--text-base);
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+.page-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}

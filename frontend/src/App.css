@@ -1,0 +1,17 @@
+.app-content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px calc(var(--nav-height) + 24px + env(safe-area-inset-bottom));
+  padding-left: calc(16px + env(safe-area-inset-left));
+  padding-right: calc(16px + env(safe-area-inset-right));
+}
+
+@media (min-width: 768px) {
+  .app {
+    padding-left: var(--rail-width);
+  }
+
+  .app-content {
+    padding: 32px 24px;
+  }
+}
