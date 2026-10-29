@@ -155,3 +155,39 @@ class TodayOut(BaseModel):
     targets: Targets
     totals: Totals
     meals: list[MealOut]
+
+
+class PortionChoice(BaseModel):
+    label: str
+    quantity: float
+    unit: str
+    grams: float
+
+
+class FoodOut(BaseModel):
+    key: str
+    fdc_id: int | None
+    custom_food_id: int | None
+    name: str
+    category: str
+    kcal_100g: float
+    protein_100g: float
+    carbs_100g: float
+    fat_100g: float
+    portions: list[PortionChoice]
+
+
+class CustomFoodIn(BaseModel):
+    name: str = Field(min_length=1, max_length=120)
+    kcal_100g: float = Field(ge=0, le=900)
+    protein_100g: float = Field(ge=0, le=100)
+    carbs_100g: float = Field(0, ge=0, le=100)
+    fat_100g: float = Field(0, ge=0, le=100)
+    serving_name: str | None = Field(None, max_length=40)
+    serving_grams: float | None = Field(None, gt=0, le=2000)
+
+
+class CustomFoodOut(CustomFoodIn):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int

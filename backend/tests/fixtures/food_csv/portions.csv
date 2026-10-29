@@ -1,0 +1,12 @@
+fdc_id,amount,unit_name,modifier,gram_weight
+1001,1.0,,large,50.0
+1001,1.0,,medium,44.0
+1001,1.0,,"cup (4.86 large eggs)",243.0
+1003,1.0,,cup,158.0
+1005,1.0,,cup,244.0
+1005,1.0,,fl oz,30.5
+1006,1.0,,"cup, chopped or diced",140.0
+1007,1.0,,slice,25.0
+1008,1.0,,"medium (7"" to 7-7/8"" long)",118.0
+1008,1.0,,"large (8"" to 8-7/8"" long)",136.0
+1009,2.0,tablespoon,,32.0

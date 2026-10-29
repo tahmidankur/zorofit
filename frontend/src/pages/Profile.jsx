@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, browserTimezone } from "../api.js";
 import Chips from "../components/Chips.jsx";
+import MyFoods from "../components/MyFoods.jsx";
 import "./Profile.css";
 
 const GOALS = [
@@ -235,6 +236,10 @@ export default function Profile() {
           </span>
         </div>
       </form>
+
+      <div className="section">
+        <MyFoods />
+      </div>
     </section>
   );
 }

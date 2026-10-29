@@ -56,6 +56,10 @@ export const api = {
   createMeal: (meal) => apiFetch("/api/meals", { method: "POST", body: meal }),
   updateMeal: (id, meal) => apiFetch(`/api/meals/${id}`, { method: "PUT", body: meal }),
   deleteMeal: (id) => apiFetch(`/api/meals/${id}`, { method: "DELETE" }),
+  searchFoods: (query) => apiFetch(`/api/foods/search?q=${encodeURIComponent(query)}`),
+  listCustomFoods: () => apiFetch("/api/foods/custom"),
+  createCustomFood: (food) => apiFetch("/api/foods/custom", { method: "POST", body: food }),
+  deleteCustomFood: (id) => apiFetch(`/api/foods/custom/${id}`, { method: "DELETE" }),
 };
 
 export { browserTimezone };

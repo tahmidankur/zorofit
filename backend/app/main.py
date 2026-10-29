@@ -6,12 +6,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from app import models  # noqa: F401  registers tables on Base.metadata
 from app.config import settings
 from app.db import Base, engine
-from app.routers import health, meals, profile, today
+from app.food_data import prepare_food_db
+from app.routers import foods, health, meals, profile, today
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(engine)
+    prepare_food_db()
     yield
 
 
@@ -29,3 +31,4 @@ app.include_router(health.router)
 app.include_router(profile.router)
 app.include_router(meals.router)
 app.include_router(today.router)
+app.include_router(foods.router)

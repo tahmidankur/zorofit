@@ -10,3 +10,13 @@ def day_totals(meals: list[Meal]) -> Totals:
         carbs_g=round(sum(item.carbs_g for item in items), 1),
         fat_g=round(sum(item.fat_g for item in items), 1),
     )
+
+
+def scale_per_100g(grams: float, kcal_100g: float, protein_100g: float, carbs_100g: float, fat_100g: float) -> dict:
+    factor = grams / 100
+    return {
+        "kcal": round(kcal_100g * factor, 1),
+        "protein_g": round(protein_100g * factor, 1),
+        "carbs_g": round(carbs_100g * factor, 1),
+        "fat_g": round(fat_100g * factor, 1),
+    }

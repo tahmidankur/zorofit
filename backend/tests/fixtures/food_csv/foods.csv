@@ -1,0 +1,10 @@
+fdc_id,description,data_type,category,kcal_100g,protein_100g,carbs_100g,fat_100g
+1001,"Egg, whole, raw, fresh",sr_legacy_food,Dairy and Egg Products,143.0,12.56,0.72,9.51
+1002,Eggnog,sr_legacy_food,Dairy and Egg Products,88.0,4.55,8.05,4.19
+1003,"Rice, white, long-grain, regular, enriched, cooked",sr_legacy_food,Cereal Grains and Pasta,130.0,2.69,28.17,0.28
+1004,"Rice bran, crude",sr_legacy_food,Cereal Grains and Pasta,316.0,13.35,49.69,20.85
+1005,"Milk, whole, 3.25% milkfat, with added vitamin D",sr_legacy_food,Dairy and Egg Products,61.0,3.15,4.8,3.25
+1006,"Chicken, broilers or fryers, breast, meat only, cooked, roasted",sr_legacy_food,Poultry Products,165.0,31.02,0.0,3.57
+1007,"Bread, white, commercially prepared",sr_legacy_food,Baked Products,266.0,8.85,49.2,3.33
+1008,"Bananas, raw",sr_legacy_food,Fruits and Fruit Juices,89.0,1.09,22.84,0.33
+1009,"Peanut butter, smooth style, with salt",foundation_food,Legumes and Legume Products,597.0,22.5,22.3,51.1

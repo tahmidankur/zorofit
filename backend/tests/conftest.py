@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -5,7 +7,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.db import Base, get_db
+from app.food_data import get_food_db
 from app.main import app
+from app.services.food_db import build_food_db, connect_read_only
 
 DEVICE_A = "11111111-1111-4111-8111-111111111111"
 DEVICE_B = "22222222-2222-4222-8222-222222222222"
@@ -24,9 +28,27 @@ def db_session():
         yield session
 
 
+FIXTURE_CSV_DIR = Path(__file__).parent / "fixtures" / "food_csv"
+
+
+@pytest.fixture(scope="session")
+def food_db_path(tmp_path_factory):
+    path = tmp_path_factory.mktemp("foods") / "foods.db"
+    build_food_db(FIXTURE_CSV_DIR, path)
+    return path
+
+
 @pytest.fixture
-def client(db_session):
+def food_conn(food_db_path):
+    conn = connect_read_only(food_db_path)
+    yield conn
+    conn.close()
+
+
+@pytest.fixture
+def client(db_session, food_conn):
     app.dependency_overrides[get_db] = lambda: db_session
+    app.dependency_overrides[get_food_db] = lambda: food_conn
     # Not used as a context manager, so the lifespan never touches the real database.
     yield TestClient(app)
     app.dependency_overrides.clear()

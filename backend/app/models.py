@@ -60,3 +60,17 @@ class MealItem(Base):
     fat_g: Mapped[float] = mapped_column(Float, default=0)
 
     meal: Mapped[Meal] = relationship(back_populates="items")
+
+
+class CustomFood(Base):
+    __tablename__ = "custom_foods"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    device_id: Mapped[str] = mapped_column(String(36), index=True)
+    name: Mapped[str] = mapped_column(String(120))
+    kcal_100g: Mapped[float] = mapped_column(Float)
+    protein_100g: Mapped[float] = mapped_column(Float)
+    carbs_100g: Mapped[float] = mapped_column(Float, default=0)
+    fat_100g: Mapped[float] = mapped_column(Float, default=0)
+    serving_name: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    serving_grams: Mapped[float | None] = mapped_column(Float, nullable=True)
