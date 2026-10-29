@@ -4,7 +4,8 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
-DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
+# Free-tier quotas decide this: gemini-3.5-flash allows 20 requests a day, and 3.8-flash took over a minute per reply.
+DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite"
 DEFAULT_GROQ_MODEL = "openai/gpt-oss-20b"
 
 

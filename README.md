@@ -69,6 +69,8 @@ cp .env.example .env          # add GEMINI_API_KEY to use chat
 uvicorn app.main:app --reload --env-file .env
 ```
 
+Evals call the real model and read keys from the environment, so load `.env` first: `set -a; . ./.env; set +a; python -m evals.run_meal_evals`.
+
 Startup runs the Alembic migrations and builds `data/foods.db` from the committed CSVs. Tests need no network or keys: `pytest`.
 
 Frontend (Node 20.19+ or 22.12+):

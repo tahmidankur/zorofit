@@ -1,6 +1,7 @@
 import difflib
 import re
 import sqlite3
+from collections import Counter
 from dataclasses import dataclass, field
 
 from app.services.portions import PortionRow, singular
@@ -111,16 +112,16 @@ def _fts(conn: sqlite3.Connection, tokens: list[str], joiner: str, limit: int) -
     return matches
 
 
-_vocabularies: dict[str, list[str]] = {}
+_vocabularies: dict[str, Counter] = {}
 
 
-def _vocabulary(conn: sqlite3.Connection) -> list[str]:
+def _vocabulary(conn: sqlite3.Connection) -> Counter:
     db_file = conn.execute("PRAGMA database_list").fetchone()["file"]
     if db_file not in _vocabularies:
-        words = set()
+        words = Counter()
         for (description,) in conn.execute("SELECT description FROM foods"):
             words.update(word for word in _tokens(description) if len(word) > 2 and not word.isdigit())
-        _vocabularies[db_file] = sorted(words)
+        _vocabularies[db_file] = words
     return _vocabularies[db_file]
 
 
@@ -128,8 +129,14 @@ def _spell_corrected(conn: sqlite3.Connection, tokens: list[str]) -> list[str]:
     vocabulary = _vocabulary(conn)
     corrected = []
     for token in tokens:
-        close = difflib.get_close_matches(token, vocabulary, n=1, cutoff=0.8)
-        corrected.append(close[0] if close else token)
+        # 0.75 lets a single swapped letter in a four-letter word through ("rize" -> "rice").
+        close = difflib.get_close_matches(token, list(vocabulary), n=5, cutoff=0.75)
+        if not close or token in vocabulary:
+            corrected.append(token)
+            continue
+        # Ties are common for short words (size, ritz, rice); the word used in more food names wins.
+        best = max(close, key=lambda word: (round(difflib.SequenceMatcher(None, token, word).ratio(), 2), vocabulary[word]))
+        corrected.append(best)
     return corrected
 
 
@@ -138,15 +145,15 @@ def search(conn: sqlite3.Connection, text: str, limit: int = 8) -> list[FoodMatc
     if not tokens:
         return []
     results: list[FoodMatch] = []
-    alias = alias_lookup(conn, text)
+    # Typos are common on phone keyboards ("chiken", "yoghurt"); the corrected words get the
+    # alias check too, since full-text search can match a misspelling to the wrong food.
+    corrected = _spell_corrected(conn, tokens)
+    alias = alias_lookup(conn, text) or alias_lookup(conn, " ".join(corrected))
     if alias:
         results.append(alias)
     found = _fts(conn, tokens, "AND", limit + 1)
-    if not found and not results:
-        # Typos are common on phone keyboards ("chiken"); only try this when nothing matched.
-        corrected = _spell_corrected(conn, tokens)
-        if corrected != tokens:
-            found = _fts(conn, corrected, "AND", limit + 1)
+    if not found and not results and corrected != tokens:
+        found = _fts(conn, corrected, "AND", limit + 1)
     if not found and not results and len(tokens) > 1:
         found = _fts(conn, tokens, "OR", limit + 1)
         for match in found:

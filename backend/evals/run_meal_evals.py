@@ -5,6 +5,7 @@ Usage: python -m evals.run_meal_evals [--provider gemini|groq] [--limit N]
 
 import argparse
 import json
+import subprocess
 import time
 from collections import defaultdict
 from dataclasses import replace
@@ -22,8 +23,25 @@ from app.services.portions import COUNT_WORDS, normalize_unit
 HERE = Path(__file__).resolve().parent
 CASES = HERE / "meal_cases.jsonl"
 RESULTS = HERE / "results"
-# Free tiers allow a handful of requests per minute.
-PAUSE_SECONDS = 4.5
+# Free tiers allow a handful of requests per minute and are sometimes overloaded.
+PAUSE_SECONDS = 6
+RETRY_WAITS = (20, 40, 60)
+RETRYABLE = {"rate_limited", "http_503", "timeout"}
+# Three rate-limited cases in a row means the daily quota is gone; waiting won't help.
+MAX_RATE_LIMITED_IN_A_ROW = 3
+
+
+def interpret_with_retries(interpreter, message: str, context: InterpretContext) -> Interpretation:
+    # The app falls back to the manual form at once; an eval should measure the model, not the quota.
+    for wait in RETRY_WAITS:
+        try:
+            return interpreter.interpret(message, context)
+        except InterpreterError as error:
+            if error.reason not in RETRYABLE:
+                raise
+            print(f"  {error.reason}, retrying in {wait} s")
+            time.sleep(wait)
+    return interpreter.interpret(message, context)
 
 
 def load_cases(limit: int | None) -> list[dict]:
@@ -104,6 +122,13 @@ def rate(values: list[bool]) -> str:
     return f"{sum(values) / len(values):.0%} ({sum(values)}/{len(values)})"
 
 
+def code_version() -> str:
+    try:
+        return subprocess.run(["git", "rev-parse", "--short", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return "unknown"
+
+
 def report(provider: str, model: str, cases: list[dict], scores: list[dict], elapsed: float) -> str:
     by_category = defaultdict(list)
     for case, score in zip(cases, scores):
@@ -121,7 +146,7 @@ def report(provider: str, model: str, cases: list[dict], scores: list[dict], ela
         f"# Meal eval run {datetime.now():%Y-%m-%d %H:%M}",
         "",
         f"- Provider: {provider}, model: `{model}`",
-        f"- Prompt version: `{PROMPT_VERSION}`",
+        f"- Prompt version: `{PROMPT_VERSION}`, code: `{code_version()}`",
         f"- Cases: {len(cases)}, time: {elapsed:.0f} s",
         "",
         "| Category | Intent | Item count | Food match | Quantity/unit |",
@@ -151,16 +176,22 @@ def main() -> None:
 
     cases = load_cases(args.limit)
     scores = []
+    rate_limited_in_a_row = 0
     started = time.monotonic()
     for index, case in enumerate(cases):
         context = InterpretContext(case["context"]["pending"], case["context"]["last_meal"])
         try:
-            interpretation = interpreter.interpret(case["message"], context)
+            interpretation = interpret_with_retries(interpreter, case["message"], context)
         except InterpreterError as error:
             print(f"{case['id']}: {error.reason}")
             if error.reason == "not_configured":
                 raise SystemExit(f"Set the API key for {args.provider} in backend/.env first.")
+            rate_limited_in_a_row = rate_limited_in_a_row + 1 if error.reason == "rate_limited" else 0
+            if rate_limited_in_a_row >= MAX_RATE_LIMITED_IN_A_ROW:
+                raise SystemExit("Stopped: the model's request quota is used up. Try again tomorrow or use another model.")
             interpretation = None
+        else:
+            rate_limited_in_a_row = 0
         scores.append(score_case(conn, case, interpretation))
         print(f"{index + 1}/{len(cases)} {case['id']}: {'ok' if not scores[-1]['notes'] else '; '.join(scores[-1]['notes'])}")
         time.sleep(PAUSE_SECONDS)

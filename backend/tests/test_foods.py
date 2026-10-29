@@ -108,3 +108,14 @@ def test_food_db_rebuilds_when_a_source_csv_is_newer(tmp_path: Path):
     ensure_food_db(csv_dir, db_path)
 
     assert search(connect_read_only(db_path), "banana")[0].default_unit == "medium"
+
+
+def test_spelling_correction_checks_aliases_again(food_conn):
+    result = search(food_conn, "ricee")[0]
+
+    assert result.fdc_id == 1003
+    assert result.default_unit == "cup"
+
+
+def test_one_letter_swap_in_a_short_word_is_corrected(food_conn):
+    assert search(food_conn, "rize")[0].default_unit == "cup"
