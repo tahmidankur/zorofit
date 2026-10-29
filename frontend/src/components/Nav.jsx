@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { CalendarCheck, History, MessageSquare, User } from "lucide-react";
+import { RailLogo } from "./Brand.jsx";
 import "./Nav.css";
 
 const LINKS = [
@@ -12,6 +13,9 @@ const LINKS = [
 export default function Nav() {
   return (
     <nav className="nav" aria-label="Main">
+      <div className="nav-logo">
+        <RailLogo />
+      </div>
       {LINKS.map(({ to, label, Icon }) => (
         <NavLink key={to} to={to} className="nav-link">
           <Icon size={20} strokeWidth={1.75} aria-hidden="true" />

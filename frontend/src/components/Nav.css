@@ -12,6 +12,10 @@
   padding-right: env(safe-area-inset-right);
 }
 
+.nav-logo {
+  display: none;
+}
+
 .nav-link {
   flex: 1;
   min-height: var(--nav-height);
@@ -45,6 +49,11 @@
     padding: calc(24px + env(safe-area-inset-top)) 8px 24px calc(8px + env(safe-area-inset-left));
     border-top: none;
     border-right: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex;
+    justify-content: center;
   }
 
   .nav-link {

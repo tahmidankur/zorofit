@@ -1,0 +1,43 @@
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border-radius: var(--radius);
+}
+
+.brand-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.mobile-header {
+  display: flex;
+  align-items: center;
+  margin: -12px 0 12px;
+}
+
+.mobile-header-wordmark {
+  display: block;
+  height: 28px;
+  width: auto;
+}
+
+.rail-logo {
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.rail-logo img {
+  display: block;
+}
+
+.zoro-avatar {
+  display: block;
+  flex: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-header {
+    display: none;
+  }
+}

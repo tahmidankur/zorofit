@@ -1,3 +1,5 @@
+<img src="docs/brand/zorofit-wordmark-green.svg" alt="ZoroFit" width="260">
+
 # ZoroFit
 
 ZoroFit is a food log and workout planner that installs to a phone's home screen. You tell its assistant, Zoro, what you ate ("two eggs and 200 g of cooked rice") or how long you have to train, and it answers with a card you can check, edit, and save. The language model only reads your message; every calorie, gram, and set count comes from USDA data and plain Python.

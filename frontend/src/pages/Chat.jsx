@@ -4,6 +4,7 @@ import { api } from "../api.js";
 import MealCard from "../components/MealCard.jsx";
 import MealForm from "../components/MealForm.jsx";
 import WorkoutCard from "../components/WorkoutCard.jsx";
+import { ZoroAvatar } from "../components/Brand.jsx";
 import "./Chat.css";
 
 function useOnline() {
@@ -81,7 +82,9 @@ function Message({ message, showCard, onProposal }) {
   }
   return (
     <li className="chat-row chat-row-zoro">
-      <p className="chat-zoro-name small">Zoro</p>
+      <p className="chat-zoro-name small">
+              <ZoroAvatar /> Zoro
+            </p>
       <p className="chat-zoro-text">{message.text}</p>
       {showCard && message.proposal.kind !== "workout" && (
         <MealCard proposal={message.proposal} onUpdate={(proposal) => onProposal(proposal)} />
@@ -169,7 +172,9 @@ export default function Chat() {
       <ol className="chat-log" aria-live="polite">
         {loaded && messages.length === 0 && (
           <li className="chat-row chat-row-zoro">
-            <p className="chat-zoro-name small">Zoro</p>
+            <p className="chat-zoro-name small">
+              <ZoroAvatar /> Zoro
+            </p>
             <p className="chat-zoro-text">
               Tell me what you ate, like “two eggs and 200 g of cooked rice”, and I'll make a card for you to check.
             </p>
@@ -185,7 +190,9 @@ export default function Chat() {
         ))}
         {sending && (
           <li className="chat-row chat-row-zoro">
-            <p className="chat-zoro-name small">Zoro</p>
+            <p className="chat-zoro-name small">
+              <ZoroAvatar /> Zoro
+            </p>
             <p className="chat-zoro-text muted">Reading…</p>
           </li>
         )}

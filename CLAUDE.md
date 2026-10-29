@@ -129,15 +129,16 @@ On first load the frontend creates a random UUID, keeps it in localStorage, and 
 
 The app should look like a tool someone designed on purpose, not a template.
 
-- Colors (CSS variables in `global.css`):
-  - `--bg: #F7F6F2` off-white page
+- Colors (CSS variables in `global.css`), taken from the ZoroFit logo kit (`docs/brand/LOGO-KIT-README.txt`):
+  - `--bg: #F4F6F9` Chalk page
   - `--surface: #FFFFFF` cards
-  - `--text: #1D1D1B`
-  - `--muted: #6B6B66`
-  - `--border: #E3E1DA`
-  - `--accent: #2E7D4F` the only accent color
-  - `--accent-soft: #E7F0EA`
+  - `--text: #0B1220` Iron
+  - `--muted: #5A6473`
+  - `--border: #DCE1E8`
+  - `--accent: #0E6B47` Zoro Green, the only accent color
+  - `--accent-soft: #E7F0ED`
   - `--danger: #B3261E` delete actions only
+- Logo: use the files in `frontend/src/assets/brand/` and `frontend/public/icons/`, never redrawn or recoloured. Green logo on white or Chalk; white logo on Zoro Green or Iron. The wordmark heads the phone layout, the symbol tops the desktop rail, the small-size symbol is Zoro's chat avatar, and the white stacked logo is the launch splash.
 - No purple anywhere. No gradients, glassmorphism, glows, or shadows heavier than `0 1px 2px rgba(0,0,0,.06)`.
 - Type: system font stack (`system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`). `font-variant-numeric: tabular-nums` on every number. Sizes 13 / 15 / 17 / 22 / 28 px.
 - Cards: white surface, 1px border, 8px radius, 16px padding. Food entries and workout suggestions in chat are cards, not chat bubbles.
