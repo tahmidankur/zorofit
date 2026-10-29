@@ -38,12 +38,18 @@ function TodaySummary({ today }) {
 
 export default function Home() {
   const [today, setToday] = useState(null);
+  const [hasHistory, setHasHistory] = useState(true);
   const [loadingDemo, setLoadingDemo] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Home still works without the API (offline, or the free server waking up); the summary just waits.
     api.getToday().then(setToday).catch(() => setToday(null));
+    // An empty today is normal after midnight; only offer sample data to someone who has logged nothing at all.
+    api
+      .listMeals(1)
+      .then((meals) => setHasHistory(meals.length > 0))
+      .catch(() => setHasHistory(true));
   }, []);
 
   async function loadDemo() {
@@ -55,8 +61,6 @@ export default function Home() {
       setLoadingDemo(false);
     }
   }
-
-  const isEmpty = today && today.meals.length === 0;
 
   return (
     <section className="home">
@@ -90,7 +94,7 @@ export default function Home() {
         ))}
       </ol>
 
-      {isEmpty && (
+      {!hasHistory && (
         <div className="home-demo">
           <p className="small muted">Just looking around? Fill the past week with sample meals and workouts.</p>
           <button type="button" className="btn btn-ghost" disabled={loadingDemo} onClick={loadDemo}>

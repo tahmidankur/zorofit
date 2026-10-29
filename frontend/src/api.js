@@ -77,7 +77,7 @@ export const api = {
   getProfile: () => apiFetch("/api/profile"),
   saveProfile: (profile) => apiFetch("/api/profile", { method: "PUT", body: profile }),
   getToday: () => apiFetch("/api/today"),
-  listMeals: () => apiFetch("/api/meals"),
+  listMeals: (limit = 200) => apiFetch(`/api/meals?limit=${limit}`),
   createMeal: (meal) => apiFetch("/api/meals", { method: "POST", body: meal }),
   updateMeal: (id, meal) => apiFetch(`/api/meals/${id}`, { method: "PUT", body: meal }),
   deleteMeal: (id) => apiFetch(`/api/meals/${id}`, { method: "DELETE" }),
