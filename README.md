@@ -42,12 +42,20 @@ Workouts work the same way. The model only reports "30 minutes". Python fills a 
 
 `backend/evals/meal_cases.jsonl` has 42 hand-written cases: single and multiple items, missing quantities, household units, typos, regional dishes, corrections, "yes" plus a new request, and out-of-scope messages. `python -m evals.run_meal_evals` calls the real model and scores intent, item count, food match, and quantity/unit accuracy. It writes a report to `backend/evals/results/`.
 
-| Run | Prompt | Intent | Item count | Food match | Quantity/unit |
-| --- | --- | --- | --- | --- | --- |
-| Baseline | `meal-v1` | not run yet | | | |
-| After fix | | | | | |
+Both runs used `gemini-3.5-flash-lite` (free tier, temperature 0) and prompt `meal-v1`.
 
-Fill this in from the first two reports.
+| Run | Intent | Item count | Food match | Quantity/unit | Typos: food match |
+| --- | --- | --- | --- | --- | --- |
+| [Baseline](backend/evals/results/2026-10-29-0025-gemini.md) | 100% (42/42) | 100% (34/34) | 85% (35/41) | 100% (47/47) | 40% (2/5) |
+| [After fix](backend/evals/results/2026-10-29-0034-gemini.md) | 100% (42/42) | 100% (34/34) | 98% (40/41) | 100% (47/47) | 100% (5/5) |
+
+**What the baseline showed.** The model read every message correctly: intents, items, quantities, and units were all right. Every miss was in food matching, and typos was the worst category. The spelling fallback found the right word ("brocoli" → "broccoli"), but then went straight to full-text search and skipped the hand-picked aliases, so it landed on raw broccoli instead of cooked. "Rize" scored a tie with "size", "ritz", and "ripe".
+
+**What changed.** After spelling correction, search checks the aliases again, and a tie between close spellings goes to the word used in more food names. Two cases also expected food ids that had been replaced the day before; those expectations were corrected. One more miss ("almond" → almond butter) disappeared because the model wrote "almonds" the second time, so part of the gain is run-to-run variation, not the fix.
+
+**What's left.** "Pho" still matches baking powder (its letters prefix "phosphate"). It's a dish USDA doesn't have, which is what My foods is for.
+
+**Choosing the model.** `gemini-3.8-flash` took over a minute per reply on the free tier, and `gemini-3.5-flash` allows only 20 requests a day per project. `gemini-3.5-flash-lite` answered in about a second with the same accuracy on these cases, so it's the default.
 
 ## Known limitations
 
