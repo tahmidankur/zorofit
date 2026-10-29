@@ -1,4 +1,4 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Annotated, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -97,8 +97,14 @@ class MealIn(BaseModel):
     @field_validator("eaten_at")
     @classmethod
     def needs_offset(cls, value: datetime | None) -> datetime | None:
-        if value is not None and value.tzinfo is None:
+        if value is None:
+            return value
+        if value.tzinfo is None:
             raise ValueError("eaten_at needs a timezone offset")
+        # A meal can be logged late, but not years back or in the future; such dates are typos or abuse.
+        now = datetime.now(timezone.utc)
+        if not now - timedelta(days=366) <= value <= now + timedelta(days=1):
+            raise ValueError("eaten_at must be within the past year")
         return value
 
 

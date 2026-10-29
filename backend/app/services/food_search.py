@@ -140,8 +140,12 @@ def _spell_corrected(conn: sqlite3.Connection, tokens: list[str]) -> list[str]:
     return corrected
 
 
+# Food names are short; capping words keeps one request from running many spelling lookups.
+MAX_QUERY_TOKENS = 8
+
+
 def search(conn: sqlite3.Connection, text: str, limit: int = 8) -> list[FoodMatch]:
-    tokens = _tokens(text)
+    tokens = _tokens(text)[:MAX_QUERY_TOKENS]
     if not tokens:
         return []
     results: list[FoodMatch] = []

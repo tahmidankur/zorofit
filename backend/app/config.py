@@ -20,6 +20,7 @@ class Settings:
     groq_api_key: str
     groq_model: str
     chat_limit_per_hour: int
+    chat_daily_limit: int
 
 
 def normalize_database_url(url: str) -> str:
@@ -45,6 +46,7 @@ def load_settings() -> Settings:
         groq_api_key=os.getenv("GROQ_API_KEY", "").strip(),
         groq_model=os.getenv("GROQ_MODEL", "").strip() or DEFAULT_GROQ_MODEL,
         chat_limit_per_hour=int(os.getenv("CHAT_LIMIT_PER_HOUR", "40")),
+        chat_daily_limit=int(os.getenv("CHAT_DAILY_LIMIT", "1000")),
     )
 
 

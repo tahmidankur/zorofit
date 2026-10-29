@@ -113,6 +113,7 @@ GROQ_MODEL=
 DATABASE_URL=sqlite:///./zorofit.db
 FRONTEND_ORIGIN=http://localhost:5173,http://localhost:4173
 CHAT_LIMIT_PER_HOUR=40
+CHAT_DAILY_LIMIT=1000
 ```
 
 `FRONTEND_ORIGIN` is a comma-separated list of origins allowed by CORS.

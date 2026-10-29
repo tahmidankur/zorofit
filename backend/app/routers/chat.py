@@ -1,7 +1,7 @@
 import sqlite3
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -10,6 +10,7 @@ from app.db import get_db
 from app.deps import get_profile
 from app.food_data import get_food_db
 from app.models import ChatMessage, Profile, Proposal, utcnow
+from app.ratelimit import CHAT, enforce
 from app.schemas import ChatIn, ChatMessageOut
 from app.services import chat, proposals
 from app.services.llm import get_interpreter
@@ -32,15 +33,22 @@ def message_out(db: Session, message: ChatMessage, fallback_query: str | None = 
     )
 
 
-def check_rate_limit(db: Session, device_id: str) -> None:
-    since = utcnow() - timedelta(hours=1)
-    sent = db.scalar(
-        select(func.count(ChatMessage.id)).where(
-            ChatMessage.device_id == device_id, ChatMessage.role == "user", ChatMessage.created_at >= since
-        )
-    )
-    if sent >= settings.chat_limit_per_hour:
+def user_messages_since(db: Session, since, device_id: str | None = None) -> int:
+    query = select(func.count(ChatMessage.id)).where(ChatMessage.role == "user", ChatMessage.created_at >= since)
+    if device_id is not None:
+        query = query.where(ChatMessage.device_id == device_id)
+    return db.scalar(query)
+
+
+def check_rate_limit(db: Session, device_id: str, request: Request) -> None:
+    now = utcnow()
+    if user_messages_since(db, now - timedelta(hours=1), device_id) >= settings.chat_limit_per_hour:
         raise HTTPException(status_code=429, detail="That's a lot of messages this hour. Try again a bit later.")
+    # Device ids are free to mint, so the network limit is what actually bounds one person's use.
+    enforce(CHAT, request, "That's a lot of messages from this network this hour. Try again a bit later.")
+    # Every message can cost a model call on the project's key; this caps the whole app's daily spend.
+    if user_messages_since(db, now - timedelta(days=1)) >= settings.chat_daily_limit:
+        raise HTTPException(status_code=429, detail="Zoro has hit today's message limit. Log meals by hand for now.")
 
 
 @router.get("", response_model=list[ChatMessageOut])
@@ -58,12 +66,13 @@ def history(profile: Profile = Depends(get_profile), db: Session = Depends(get_d
 @router.post("", response_model=list[ChatMessageOut])
 def send(
     body: ChatIn,
+    request: Request,
     profile: Profile = Depends(get_profile),
     db: Session = Depends(get_db),
     foods_db: sqlite3.Connection = Depends(get_food_db),
     interpreter: Interpreter = Depends(get_interpreter),
 ):
-    check_rate_limit(db, profile.device_id)
+    check_rate_limit(db, profile.device_id, request)
     text = body.message.strip()
     user_message = chat.save_message(db, profile.device_id, "user", text)
     turn = chat.Turn(db=db, foods_db=foods_db, profile=profile)

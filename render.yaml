@@ -27,6 +27,8 @@ services:
         sync: false
       - key: CHAT_LIMIT_PER_HOUR
         value: "40"
+      - key: CHAT_DAILY_LIMIT
+        value: "1000"
 
   - type: web
     name: zorofit-web

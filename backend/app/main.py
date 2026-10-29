@@ -3,12 +3,14 @@ from contextlib import asynccontextmanager
 
 from sqlalchemy.engine import make_url
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from app.config import settings
 from app.food_data import prepare_food_db
 from app.migrate import run_migrations
+from app.ratelimit import ALL_REQUESTS, client_ip
 from app.routers import chat, demo, foods, health, meals, profile, proposals, today, workouts
 
 
@@ -44,6 +46,25 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["X-Device-Id", "X-Timezone", "Content-Type"],
 )
+
+# JSON bodies here are small (a chat message, a meal of at most 20 items); anything bigger is abuse.
+MAX_BODY_BYTES = 64 * 1024
+WRITE_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
+
+
+@app.middleware("http")
+async def guard_requests(request: Request, call_next):
+    if request.method in WRITE_METHODS:
+        length = request.headers.get("content-length")
+        if length is None and request.headers.get("transfer-encoding"):
+            return JSONResponse({"detail": "Content-Length is required"}, status_code=411)
+        if length is not None and (not length.isdigit() or int(length) > MAX_BODY_BYTES):
+            return JSONResponse({"detail": "Request body is too large"}, status_code=413)
+    if request.url.path.startswith("/api/") and request.url.path != "/api/health" and request.method != "OPTIONS":
+        if not ALL_REQUESTS.allow(client_ip(request)):
+            return JSONResponse({"detail": "Too many requests. Slow down and try again shortly."}, status_code=429)
+    return await call_next(request)
+
 
 app.include_router(health.router)
 app.include_router(profile.router)

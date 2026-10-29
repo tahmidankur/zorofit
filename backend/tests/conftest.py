@@ -10,6 +10,7 @@ from app import models  # noqa: F401  registers tables on Base.metadata
 from app.db import Base, get_db
 from app.food_data import get_food_db
 from app.main import app
+from app.ratelimit import LIMITERS
 from app.services.food_db import build_food_db, connect_read_only
 from app.services.llm import get_interpreter
 from tests.fake_interpreter import FakeInterpreter
@@ -32,6 +33,14 @@ def db_session():
 
 
 FIXTURE_CSV_DIR = Path(__file__).parent / "fixtures" / "food_csv"
+
+
+@pytest.fixture(autouse=True)
+def fresh_rate_limits():
+    # The limiters are process-wide, so each test starts with empty windows.
+    for limiter in LIMITERS:
+        limiter.reset()
+    yield
 
 
 @pytest.fixture(scope="session")
