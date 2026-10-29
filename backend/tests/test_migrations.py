@@ -25,3 +25,18 @@ def test_postgres_urls_use_psycopg_driver():
     assert normalize_database_url("postgres://u:p@host/db") == "postgresql+psycopg://u:p@host/db"
     assert normalize_database_url("postgresql://u:p@host/db?sslmode=require") == "postgresql+psycopg://u:p@host/db?sslmode=require"
     assert normalize_database_url("sqlite:///./zorofit.db") == "sqlite:///./zorofit.db"
+
+
+def test_config_description_never_includes_secrets(monkeypatch):
+    from app import main
+    from app.config import settings
+
+    secret_settings = settings.__class__(
+        **{**settings.__dict__, "database_url": "postgresql+psycopg://user:hunter2@db.example.com:5432/postgres", "gemini_api_key": "AIza-secret"}
+    )
+    monkeypatch.setattr(main, "settings", secret_settings)
+
+    text = main.describe_config()
+
+    assert "host=db.example.com" in text and "api_key_set=True" in text
+    assert "hunter2" not in text and "AIza-secret" not in text

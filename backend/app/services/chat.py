@@ -1,5 +1,6 @@
 """The chat pipeline: safety check, interpretation, then one reply per action."""
 
+import logging
 import sqlite3
 from dataclasses import dataclass, field
 
@@ -14,6 +15,8 @@ from app.services.llm.prompts import PROMPT_VERSION
 FALLBACK_REPLY = "I couldn't read that one. You can add it by hand below."
 NOTHING_PENDING = "There's no card waiting to be saved."
 MAX_CHAT_REPLY = 400
+
+logger = logging.getLogger("uvicorn.error")
 
 
 @dataclass
@@ -185,7 +188,8 @@ def run(turn: Turn, message: str, interpreter: Interpreter) -> list[Reply]:
         return [Reply(fixed)]
     try:
         interpretation = interpreter.interpret(message, build_context(turn))
-    except InterpreterError:
+    except InterpreterError as error:
+        logger.warning("interpreter failed: %s", error.reason)
         return [Reply(FALLBACK_REPLY, fallback_query=message)]
     # A medical message never also gets a meal or workout from the same turn.
     if any(action.type == "out_of_scope" for action in interpretation.actions):
