@@ -146,8 +146,8 @@ class Totals(BaseModel):
 
 
 class Targets(BaseModel):
-    kcal: int
-    protein_g: int
+    kcal: float
+    protein_g: float
 
 
 class TodayOut(BaseModel):
@@ -191,3 +191,69 @@ class CustomFoodOut(CustomFoodIn):
     model_config = ConfigDict(from_attributes=True)
 
     id: int
+
+
+class FoodSummary(BaseModel):
+    key: str | None
+    name: str
+    category: str
+
+
+class ProposalItemOut(BaseModel):
+    item_id: str
+    query: str
+    key: str | None
+    food_name: str
+    category: str
+    quantity: float | None
+    unit: str | None
+    portion_text: str
+    grams: float | None
+    kcal: float | None
+    protein_g: float | None
+    carbs_g: float | None
+    fat_g: float | None
+    needs_portion: bool
+    unmatched: bool
+    portion_choices: list[PortionChoice]
+    alternatives: list[FoodSummary]
+
+
+class ProposalOut(BaseModel):
+    id: str
+    kind: str
+    status: str
+    label: str | None = None
+    meal_id: int | None = None
+    items: list[ProposalItemOut] = []
+    totals: Targets | None = None
+    can_save: bool
+    duplicate_saved_at: UtcDatetime | None = None
+    workout: dict | None = None
+
+
+class ProposalItemEdit(BaseModel):
+    item_id: str
+    key: str | None = None
+    grams: float | None = Field(None, gt=0, le=5000)
+    portion_text: str | None = Field(None, max_length=60)
+    kcal: float | None = Field(None, ge=0, le=10000)
+    protein_g: float | None = Field(None, ge=0, le=1000)
+
+
+class ProposalEdit(BaseModel):
+    label: MealLabel | None = None
+    items: list[ProposalItemEdit] = Field(min_length=1, max_length=20)
+
+
+class ChatIn(BaseModel):
+    message: str = Field(min_length=1, max_length=1000)
+
+
+class ChatMessageOut(BaseModel):
+    id: int
+    role: str
+    text: str
+    created_at: UtcDatetime
+    proposal: ProposalOut | None = None
+    fallback_query: str | None = None

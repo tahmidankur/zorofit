@@ -4,12 +4,21 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
+DEFAULT_GEMINI_MODEL = "gemini-3.8-flash"
+DEFAULT_GROQ_MODEL = "openai/gpt-oss-20b"
+
 
 @dataclass(frozen=True)
 class Settings:
     database_url: str
     frontend_origin: str
     foods_db_path: Path
+    llm_provider: str
+    gemini_api_key: str
+    gemini_model: str
+    groq_api_key: str
+    groq_model: str
+    chat_limit_per_hour: int
 
 
 def load_settings() -> Settings:
@@ -17,6 +26,12 @@ def load_settings() -> Settings:
         database_url=os.getenv("DATABASE_URL", "sqlite:///./liftfuel.db"),
         frontend_origin=os.getenv("FRONTEND_ORIGIN", "http://localhost:5173"),
         foods_db_path=Path(os.getenv("FOODS_DB_PATH", DATA_DIR / "foods.db")),
+        llm_provider=os.getenv("LLM_PROVIDER", "gemini").strip().lower(),
+        gemini_api_key=os.getenv("GEMINI_API_KEY", "").strip(),
+        gemini_model=os.getenv("GEMINI_MODEL", "").strip() or DEFAULT_GEMINI_MODEL,
+        groq_api_key=os.getenv("GROQ_API_KEY", "").strip(),
+        groq_model=os.getenv("GROQ_MODEL", "").strip() or DEFAULT_GROQ_MODEL,
+        chat_limit_per_hour=int(os.getenv("CHAT_LIMIT_PER_HOUR", "40")),
     )
 
 

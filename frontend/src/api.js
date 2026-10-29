@@ -60,6 +60,11 @@ export const api = {
   listCustomFoods: () => apiFetch("/api/foods/custom"),
   createCustomFood: (food) => apiFetch("/api/foods/custom", { method: "POST", body: food }),
   deleteCustomFood: (id) => apiFetch(`/api/foods/custom/${id}`, { method: "DELETE" }),
+  chatHistory: () => apiFetch("/api/chat"),
+  sendChat: (message) => apiFetch("/api/chat", { method: "POST", body: { message } }),
+  editProposal: (id, body) => apiFetch(`/api/proposals/${id}`, { method: "PUT", body }),
+  confirmProposal: (id) => apiFetch(`/api/proposals/${id}/confirm`, { method: "POST" }),
+  discardProposal: (id) => apiFetch(`/api/proposals/${id}/discard`, { method: "POST" }),
 };
 
 export { browserTimezone };

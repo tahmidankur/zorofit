@@ -17,6 +17,8 @@ class FoodMatch:
     fat_100g: float
     default_unit: str = ""
     portions: list[PortionRow] = field(default_factory=list)
+    # True when only some of the query words matched, so the food is a guess, not a match.
+    partial: bool = False
 
 
 def normalize_phrase(text: str) -> str:
@@ -147,6 +149,8 @@ def search(conn: sqlite3.Connection, text: str, limit: int = 8) -> list[FoodMatc
             found = _fts(conn, corrected, "AND", limit + 1)
     if not found and not results and len(tokens) > 1:
         found = _fts(conn, tokens, "OR", limit + 1)
+        for match in found:
+            match.partial = True
     seen = {match.fdc_id for match in results}
     results.extend(match for match in found if match.fdc_id not in seen)
     results = results[:limit]

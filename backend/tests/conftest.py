@@ -10,6 +10,8 @@ from app.db import Base, get_db
 from app.food_data import get_food_db
 from app.main import app
 from app.services.food_db import build_food_db, connect_read_only
+from app.services.llm import get_interpreter
+from tests.fake_interpreter import FakeInterpreter
 
 DEVICE_A = "11111111-1111-4111-8111-111111111111"
 DEVICE_B = "22222222-2222-4222-8222-222222222222"
@@ -46,9 +48,15 @@ def food_conn(food_db_path):
 
 
 @pytest.fixture
-def client(db_session, food_conn):
+def interpreter():
+    return FakeInterpreter()
+
+
+@pytest.fixture
+def client(db_session, food_conn, interpreter):
     app.dependency_overrides[get_db] = lambda: db_session
     app.dependency_overrides[get_food_db] = lambda: food_conn
+    app.dependency_overrides[get_interpreter] = lambda: interpreter
     # Not used as a context manager, so the lifespan never touches the real database.
     yield TestClient(app)
     app.dependency_overrides.clear()

@@ -25,6 +25,24 @@ def build_items(items: list[MealItemIn]) -> list[MealItem]:
     return [MealItem(**item.model_dump()) for item in items]
 
 
+def new_meal(
+    profile: Profile,
+    items: list[MealItemIn],
+    eaten_at: datetime | None = None,
+    label: str | None = None,
+    source: str = "manual",
+) -> Meal:
+    eaten_at = eaten_at or datetime.now(timezone.utc)
+    return Meal(
+        device_id=profile.device_id,
+        eaten_at=to_naive_utc(eaten_at),
+        local_date=local_date_for(eaten_at, profile.timezone),
+        label=label,
+        source=source,
+        items=build_items(items),
+    )
+
+
 def create_meal(
     db: Session,
     profile: Profile,
@@ -33,15 +51,7 @@ def create_meal(
     label: str | None = None,
     source: str = "manual",
 ) -> Meal:
-    eaten_at = eaten_at or datetime.now(timezone.utc)
-    meal = Meal(
-        device_id=profile.device_id,
-        eaten_at=to_naive_utc(eaten_at),
-        local_date=local_date_for(eaten_at, profile.timezone),
-        label=label,
-        source=source,
-        items=build_items(items),
-    )
+    meal = new_meal(profile, items, eaten_at, label, source)
     db.add(meal)
     db.commit()
     db.refresh(meal)

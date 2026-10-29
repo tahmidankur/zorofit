@@ -74,3 +74,27 @@ class CustomFood(Base):
     fat_100g: Mapped[float] = mapped_column(Float, default=0)
     serving_name: Mapped[str | None] = mapped_column(String(40), nullable=True)
     serving_grams: Mapped[float | None] = mapped_column(Float, nullable=True)
+
+
+class Proposal(Base):
+    __tablename__ = "proposals"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    device_id: Mapped[str] = mapped_column(String(36), index=True)
+    kind: Mapped[str] = mapped_column(String(10))
+    payload: Mapped[dict] = mapped_column(JSON)
+    status: Mapped[str] = mapped_column(String(10), default="pending")
+    prompt_version: Mapped[str] = mapped_column(String(20), default="")
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    resolved_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+
+class ChatMessage(Base):
+    __tablename__ = "chat_messages"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    device_id: Mapped[str] = mapped_column(String(36), index=True)
+    role: Mapped[str] = mapped_column(String(10))
+    text: Mapped[str] = mapped_column(String(2000))
+    proposal_id: Mapped[str | None] = mapped_column(ForeignKey("proposals.id"), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
