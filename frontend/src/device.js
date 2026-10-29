@@ -1,4 +1,4 @@
-const STORAGE_KEY = "zoro.deviceId";
+const STORAGE_KEY = "liftfuel.deviceId";
 
 // crypto.randomUUID only exists in secure contexts, so a phone opening the dev
 // server over a LAN address (plain http) needs the getRandomValues fallback.

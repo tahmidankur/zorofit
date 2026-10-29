@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routers import health
 
-app = FastAPI(title="Zoro")
+app = FastAPI(title="Lift & Fuel")
 
 # The frontend runs on its own origin and sends X-Device-Id, which needs an explicit allow.
 app.add_middleware(

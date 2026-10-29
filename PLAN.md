@@ -1,10 +1,12 @@
-# Zoro build plan
+# Lift & Fuel build plan
 
 First working goal: tell Zoro what you ate → confirm the food and portion → save the meal → see Today update.
 
 Everything below serves that goal first. Workouts come after the meal loop works end to end. Treat milestones as checkpoints, not weekly deadlines.
 
-## What Zoro does (v1)
+## What Lift & Fuel does (v1)
+
+Lift & Fuel is the app. Zoro is its chat assistant.
 
 | Feature | What it does |
 | --- | --- |
@@ -174,7 +176,7 @@ The meal loop through chat. This is the core of the project.
 
 ## Milestone 5: Mobile experience and deploy
 
-- `vite-plugin-pwa`: manifest (name "Zoro", green theme color, off-white background color, 192 and 512 px icons plus a maskable icon, apple-touch-icon), service worker that caches the app shell. Chat shows "You're offline" without network.
+- `vite-plugin-pwa`: manifest (name "Lift & Fuel", green theme color, off-white background color, 192 and 512 px icons plus a maskable icon, apple-touch-icon), service worker that caches the app shell. Chat shows "You're offline" without network.
 - Check layouts at 360, 390, 768, and 1024 px. Test add-to-home-screen on one Android phone and one iPhone or iPad.
 - Add Alembic before switching to Postgres. Create the initial migration from the current models.
 - Deploy:
@@ -193,7 +195,7 @@ The meal loop through chat. This is the core of the project.
 ## Milestone 6: Portfolio
 
 - README, in this order:
-  1. What Zoro does, in three sentences, with one screenshot.
+  1. What Lift & Fuel does, in three sentences, with one screenshot.
   2. Screenshots: Today, Chat with a meal card, workout card, History.
   3. How a message becomes a meal: message → interpretation JSON → food match → grams → card → confirm. One small diagram.
   4. Decisions and tradeoffs: why the model doesn't do math, why USDA data is local, why confirm-before-save, why no login.

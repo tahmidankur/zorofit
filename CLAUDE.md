@@ -1,6 +1,6 @@
-# Zoro
+# Lift & Fuel
 
-Zoro is a small fitness and food-logging assistant, built as one responsive web app that installs to a phone or tablet home screen (PWA). The user tells Zoro what they ate or how much time they have to train. Zoro answers with a card (a proposed meal entry or a proposed workout). Nothing is saved until the user confirms the card.
+Lift & Fuel is a small fitness and food-logging app with a chat assistant named Zoro, built as one responsive web app that installs to a phone or tablet home screen (PWA). The user tells Zoro what they ate or how much time they have to train. Zoro answers with a card (a proposed meal entry or a proposed workout). Nothing is saved until the user confirms the card.
 
 The milestone plan is in PLAN.md. Work on one milestone at a time and stop when its "Done when" list passes.
 
@@ -25,7 +25,7 @@ The model reads text. Python does every number.
 ## Repo layout
 
 ```
-zoro/
+lift-and-fuel/
   CLAUDE.md
   PLAN.md
   README.md
@@ -110,7 +110,7 @@ GEMINI_API_KEY=
 GEMINI_MODEL=
 GROQ_API_KEY=
 GROQ_MODEL=
-DATABASE_URL=sqlite:///./zoro.db
+DATABASE_URL=sqlite:///./liftfuel.db
 FRONTEND_ORIGIN=http://localhost:5173
 CHAT_LIMIT_PER_HOUR=40
 ```
@@ -161,7 +161,7 @@ The app should look like a tool someone designed on purpose, not a template.
 
 ## Safety and scope
 
-- Zoro is a fitness and food-logging assistant, not a medical tool. If a message mentions injury, pain, illness, medication, pregnancy, or disordered eating, Zoro gives no advice for that message. It replies with a short fixed message suggesting a doctor, physiotherapist, or other qualified professional, and does not generate a workout from that message. The fixed messages live in `services/safety.py`.
+- Lift & Fuel is a fitness and food-logging app, not a medical tool. If a message mentions injury, pain, illness, medication, pregnancy, or disordered eating, Zoro gives no advice for that message. It replies with a short fixed message suggesting a doctor, physiotherapist, or other qualified professional, and does not generate a workout from that message. The fixed messages live in `services/safety.py`.
 - Calorie target must be 1,200 to 5,000 kcal. Protein target must be 30 to 300 g. Validate on the backend and in the form.
 - The Chat screen shows one line under the input: messages are processed by Google's Gemini API, so don't include personal health details.
 

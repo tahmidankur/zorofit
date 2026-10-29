@@ -1,4 +1,4 @@
-# Zoro
+# Lift & Fuel
 
 A fitness and food-logging assistant that runs as an installable web app. Work in progress; see PLAN.md.
 

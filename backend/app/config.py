@@ -10,7 +10,7 @@ class Settings:
 
 def load_settings() -> Settings:
     return Settings(
-        database_url=os.getenv("DATABASE_URL", "sqlite:///./zoro.db"),
+        database_url=os.getenv("DATABASE_URL", "sqlite:///./liftfuel.db"),
         frontend_origin=os.getenv("FRONTEND_ORIGIN", "http://localhost:5173"),
     )
 
