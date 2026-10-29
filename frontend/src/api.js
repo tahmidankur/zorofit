@@ -24,6 +24,20 @@ function errorMessage(body, status) {
   return `Request failed (${status})`;
 }
 
+// The free API host sleeps when idle; a slow first response means it is waking up.
+const SLOW_START_MS = 3000;
+let serverAwake = false;
+const wakeListeners = new Set();
+
+export function onServerWaking(listener) {
+  wakeListeners.add(listener);
+  return () => wakeListeners.delete(listener);
+}
+
+function notifyWaking(waking) {
+  wakeListeners.forEach((listener) => listener(waking));
+}
+
 export async function apiFetch(path, { method = "GET", body } = {}) {
   const headers = {
     "X-Device-Id": getDeviceId(),
@@ -33,11 +47,21 @@ export async function apiFetch(path, { method = "GET", body } = {}) {
     headers["Content-Type"] = "application/json";
   }
 
-  const response = await fetch(`${API_URL}${path}`, {
-    method,
-    headers,
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
+  const timer = serverAwake ? null : setTimeout(() => notifyWaking(true), SLOW_START_MS);
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      method,
+      headers,
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!serverAwake) {
+    serverAwake = true;
+    notifyWaking(false);
+  }
   if (response.status === 204) return null;
 
   const data = await response.json().catch(() => null);
@@ -49,6 +73,7 @@ export async function apiFetch(path, { method = "GET", body } = {}) {
 
 export const api = {
   health: () => apiFetch("/api/health"),
+  loadDemoData: () => apiFetch("/api/demo", { method: "POST" }),
   getProfile: () => apiFetch("/api/profile"),
   saveProfile: (profile) => apiFetch("/api/profile", { method: "PUT", body: profile }),
   getToday: () => apiFetch("/api/today"),

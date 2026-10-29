@@ -70,3 +70,41 @@ def test_rice_search_on_real_data_lists_cooked_white_rice_in_top_3(tmp_path: Pat
     names = [match.description for match in search(conn, "rice")[:3]]
 
     assert "Rice, white, long-grain, regular, enriched, cooked" in names
+
+
+def test_every_alias_with_a_default_unit_resolves_on_real_data(tmp_path: Path):
+    import csv
+
+    from app.services.food_search import get_food
+    from app.services.portions import to_grams
+
+    db_path = tmp_path / "foods.db"
+    build_food_db(DATA_DIR, db_path)
+    conn = connect_read_only(db_path)
+    broken = []
+    for row in csv.DictReader((DATA_DIR / "aliases.csv").open()):
+        food = get_food(conn, int(row["fdc_id"]))
+        if food is None or (row["default_unit"] and to_grams(food.portions, 1, None, food.description, row["default_unit"]).needs_portion):
+            broken.append(row["phrase"])
+
+    assert broken == []
+
+
+def test_food_db_rebuilds_when_a_source_csv_is_newer(tmp_path: Path):
+    import os
+    import shutil
+
+    from app.services.food_db import ensure_food_db
+    from tests.conftest import FIXTURE_CSV_DIR
+
+    csv_dir = tmp_path / "csv"
+    shutil.copytree(FIXTURE_CSV_DIR, csv_dir)
+    db_path = tmp_path / "foods.db"
+    ensure_food_db(csv_dir, db_path)
+    (csv_dir / "aliases.csv").write_text("phrase,fdc_id,default_unit\nbanana,1008,medium\n")
+    later = db_path.stat().st_mtime + 10
+    os.utime(csv_dir / "aliases.csv", (later, later))
+
+    ensure_food_db(csv_dir, db_path)
+
+    assert search(connect_read_only(db_path), "banana")[0].default_unit == "medium"

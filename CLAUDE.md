@@ -111,9 +111,11 @@ GEMINI_MODEL=
 GROQ_API_KEY=
 GROQ_MODEL=
 DATABASE_URL=sqlite:///./liftfuel.db
-FRONTEND_ORIGIN=http://localhost:5173
+FRONTEND_ORIGIN=http://localhost:5173,http://localhost:4173
 CHAT_LIMIT_PER_HOUR=40
 ```
+
+`FRONTEND_ORIGIN` is a comma-separated list of origins allowed by CORS.
 
 `frontend/.env`: `VITE_API_URL=http://localhost:8000`
 

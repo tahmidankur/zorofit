@@ -69,8 +69,13 @@ def build_food_db(csv_dir: Path, db_path: Path) -> None:
     os.replace(tmp_path, db_path)
 
 
+SOURCE_FILES = ("foods.csv", "portions.csv", "aliases.csv")
+
+
 def ensure_food_db(csv_dir: Path, db_path: Path) -> None:
-    if not db_path.exists():
+    # Rebuild when a committed CSV is newer, so alias fixes reach a dev machine without manual steps.
+    sources = [csv_dir / name for name in SOURCE_FILES if (csv_dir / name).exists()]
+    if not db_path.exists() or any(source.stat().st_mtime > db_path.stat().st_mtime for source in sources):
         build_food_db(csv_dir, db_path)
 
 

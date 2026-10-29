@@ -11,7 +11,7 @@ DEFAULT_GROQ_MODEL = "openai/gpt-oss-20b"
 @dataclass(frozen=True)
 class Settings:
     database_url: str
-    frontend_origin: str
+    frontend_origins: list[str]
     foods_db_path: Path
     llm_provider: str
     gemini_api_key: str
@@ -21,10 +21,22 @@ class Settings:
     chat_limit_per_hour: int
 
 
+def normalize_database_url(url: str) -> str:
+    # Neon and Render hand out postgres:// URLs; SQLAlchemy needs the psycopg 3 driver named.
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix):]
+    return url
+
+
 def load_settings() -> Settings:
     return Settings(
-        database_url=os.getenv("DATABASE_URL", "sqlite:///./liftfuel.db"),
-        frontend_origin=os.getenv("FRONTEND_ORIGIN", "http://localhost:5173"),
+        database_url=normalize_database_url(os.getenv("DATABASE_URL", "sqlite:///./liftfuel.db")),
+        frontend_origins=[
+            origin.strip().rstrip("/")
+            for origin in os.getenv("FRONTEND_ORIGIN", "http://localhost:5173").split(",")
+            if origin.strip()
+        ],
         foods_db_path=Path(os.getenv("FOODS_DB_PATH", DATA_DIR / "foods.db")),
         llm_provider=os.getenv("LLM_PROVIDER", "gemini").strip().lower(),
         gemini_api_key=os.getenv("GEMINI_API_KEY", "").strip(),

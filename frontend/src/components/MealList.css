@@ -42,6 +42,10 @@
   min-width: 0;
 }
 
+.meal-item > .num {
+  white-space: nowrap;
+}
+
 .meal-actions {
   margin: 8px -12px -8px;
 }

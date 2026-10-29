@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Nav from "./components/Nav.jsx";
+import ServerWaking from "./components/ServerWaking.jsx";
 import Today from "./pages/Today.jsx";
 import Chat from "./pages/Chat.jsx";
 import History from "./pages/History.jsx";
@@ -11,6 +12,7 @@ export default function App() {
     <div className="app">
       <Nav />
       <main className="app-content">
+        <ServerWaking />
         <Routes>
           <Route path="/" element={<Navigate to="/today" replace />} />
           <Route path="/today" element={<Today />} />

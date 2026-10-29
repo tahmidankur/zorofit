@@ -76,7 +76,8 @@ def row_words(row: PortionRow) -> set[str]:
         words.add(normalize_unit(modifier))
         first = re.split(r"[,(]", modifier, maxsplit=1)[0].strip()
         words.add(normalize_unit(first))
-        words.add(normalize_unit(first.split(" ")[0]))
+        # SR Legacy sometimes puts the food name first ("potato medium").
+        words.update(normalize_unit(word) for word in first.split(" "))
     words.discard("")
     return words
 

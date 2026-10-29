@@ -48,7 +48,7 @@ export default function WorkoutCard({ plan, title, status, actions }) {
       </ol>
       {plan.skipped_patterns.length > 0 && (
         <p className="small muted">
-          No {plan.skipped_patterns.map((p) => PATTERN_NAMES[p] ?? p).join(", ")} exercise fits your equipment.
+          Left out because nothing fits your equipment: {plan.skipped_patterns.map((p) => PATTERN_NAMES[p] ?? p).join(", ")}.
         </p>
       )}
       {actions && <div className="btn-row">{actions}</div>}

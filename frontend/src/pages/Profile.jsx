@@ -52,6 +52,42 @@ function rangeError(form) {
   return null;
 }
 
+function DemoData() {
+  const [status, setStatus] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function load() {
+    setBusy(true);
+    try {
+      const result = await api.loadDemoData();
+      setStatus(
+        result.meals_added || result.workouts_added
+          ? `Added ${result.meals_added} meals and ${result.workouts_added} workouts. See Today and History.`
+          : "Every day this week already has entries."
+      );
+    } catch (err) {
+      setStatus(err.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="card stack">
+      <h2 className="section-title">Demo data</h2>
+      <p className="small muted">Fills the past week with sample meals and workouts. Days you already logged are left alone.</p>
+      <div className="btn-row profile-actions">
+        <button type="button" className="btn" disabled={busy} onClick={load}>
+          {busy ? "Loading…" : "Load demo data"}
+        </button>
+        <span className="small muted" role="status">
+          {status}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function Profile() {
   const [form, setForm] = useState(null);
   const [status, setStatus] = useState("");
@@ -251,6 +287,10 @@ export default function Profile() {
 
       <div className="section">
         <MyFoods />
+      </div>
+
+      <div className="section">
+        <DemoData />
       </div>
     </section>
   );

@@ -87,3 +87,9 @@ def test_two_large_eggs_from_food_db_match_per_100g_values(food_conn):
     assert result.grams == 100
     assert totals["kcal"] == pytest.approx(result.grams * egg.kcal_100g / 100)
     assert totals["protein_g"] == pytest.approx(round(result.grams * egg.protein_100g / 100, 1))
+
+
+def test_unit_matches_any_word_before_the_comma_in_modifier():
+    potato = [PortionRow(1, "", "potato large", 299), PortionRow(1, "", "potato medium", 173)]
+
+    assert to_grams(potato, 1, "medium").grams == 173
