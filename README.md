@@ -42,12 +42,13 @@ Workouts work the same way. The model only reports "30 minutes". Python fills a 
 
 `backend/evals/meal_cases.jsonl` has 42 hand-written cases: single and multiple items, missing quantities, household units, typos, regional dishes, corrections, "yes" plus a new request, and out-of-scope messages. `python -m evals.run_meal_evals` calls the real model and scores intent, item count, food match, and quantity/unit accuracy. It writes a report to `backend/evals/results/`.
 
-Both runs used `gemini-3.5-flash-lite` (free tier, temperature 0) and prompt `meal-v1`.
+All runs used `gemini-3.5-flash-lite` (free tier, temperature 0). The first two used prompt `meal-v1`; the third used `meal-v2`, which only changes the app's name to ZoroFit.
 
 | Run | Intent | Item count | Food match | Quantity/unit | Typos: food match |
 | --- | --- | --- | --- | --- | --- |
 | [Baseline](backend/evals/results/2026-10-29-0025-gemini.md) | 100% (42/42) | 100% (34/34) | 85% (35/41) | 100% (47/47) | 40% (2/5) |
 | [After fix](backend/evals/results/2026-10-29-0034-gemini.md) | 100% (42/42) | 100% (34/34) | 98% (40/41) | 100% (47/47) | 100% (5/5) |
+| [Rename check (`meal-v2`)](backend/evals/results/2026-10-29-0043-gemini.md) | 100% (42/42) | 100% (34/34) | 98% (40/41) | 100% (47/47) | 100% (5/5) |
 
 **What the baseline showed.** The model read every message correctly: intents, items, quantities, and units were all right. Every miss was in food matching, and typos was the worst category. The spelling fallback found the right word ("brocoli" → "broccoli"), but then went straight to full-text search and skipped the hand-picked aliases, so it landed on raw broccoli instead of cooked. "Rize" scored a tie with "size", "ritz", and "ripe".
 
