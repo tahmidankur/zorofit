@@ -1,13 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import wordmark from "../assets/brand/zorofit-wordmark-green.svg";
 import symbol from "../assets/brand/zorofit-symbol-green.svg";
 import symbolSmall from "../assets/brand/zorofit-symbol-small-green.svg";
 import "./Brand.css";
 
 export function MobileHeader() {
+  // Home shows the full stacked logo, so the header wordmark would repeat it.
+  if (useLocation().pathname === "/") return null;
   return (
     <header className="mobile-header">
-      <Link to="/today" className="brand-link" aria-label="ZoroFit, go to Today">
+      <Link to="/" className="brand-link" aria-label="ZoroFit home">
         <img src={wordmark} alt="" className="mobile-header-wordmark" width="81" height="28" />
       </Link>
     </header>
@@ -16,7 +18,7 @@ export function MobileHeader() {
 
 export function RailLogo() {
   return (
-    <Link to="/today" className="brand-link rail-logo" aria-label="ZoroFit, go to Today">
+    <Link to="/" className="brand-link rail-logo" aria-label="ZoroFit home">
       <img src={symbol} alt="" width="40" height="40" />
     </Link>
   );

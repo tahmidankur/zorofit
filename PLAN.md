@@ -26,6 +26,7 @@ Numbers in the example are illustrative; the real ones come from `foods.db`.
 
 ## Screens
 
+0. **Home**: opens at launch after the splash. Logo, one line on what ZoroFit does, Open Today and Chat buttons, today's calories, protein and workout at a glance, how it works in three steps, and a "Load a sample week" button while nothing is logged.
 1. **Today**: calorie and protein progress against targets, list of today's meals, today's workout (planned / done / skipped).
 2. **Chat**: conversation with Zoro. Meal and workout proposals appear as cards with buttons.
 3. **History**: meals and workouts grouped by day. Edit and delete.

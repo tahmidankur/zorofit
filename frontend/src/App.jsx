@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Nav from "./components/Nav.jsx";
 import { MobileHeader } from "./components/Brand.jsx";
 import ServerWaking from "./components/ServerWaking.jsx";
+import Home from "./pages/Home.jsx";
 import Today from "./pages/Today.jsx";
 import Chat from "./pages/Chat.jsx";
 import History from "./pages/History.jsx";
@@ -16,12 +17,12 @@ export default function App() {
         <MobileHeader />
         <ServerWaking />
         <Routes>
-          <Route path="/" element={<Navigate to="/today" replace />} />
+          <Route path="/" element={<Home />} />
           <Route path="/today" element={<Today />} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/history" element={<History />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<Navigate to="/today" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
     </div>

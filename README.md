@@ -4,13 +4,13 @@
 
 ZoroFit is a food log and workout planner that installs to a phone's home screen. You tell its assistant, Zoro, what you ate ("two eggs and 200 g of cooked rice") or how long you have to train, and it answers with a card you can check, edit, and save. The language model only reads your message; every calorie, gram, and set count comes from USDA data and plain Python.
 
-<img src="docs/screenshots/today.png" alt="Today screen with calorie and protein progress and a planned workout" width="300">
+<img src="docs/screenshots/home.png" alt="Home screen with the ZoroFit logo, today's calories and protein, and how it works" width="300">
 
 ## Screenshots
 
-| Today | Chat: meal card | Chat: workout card | History |
-| --- | --- | --- | --- |
-| <img src="docs/screenshots/today.png" width="200" alt="Today"> | <img src="docs/screenshots/chat-meal-card.png" width="200" alt="Meal card in chat"> | <img src="docs/screenshots/chat-workout-card.png" width="200" alt="Workout card in chat"> | <img src="docs/screenshots/history.png" width="200" alt="History"> |
+| Home | Today | Chat: meal card | Chat: workout card | History |
+| --- | --- | --- | --- | --- |
+| <img src="docs/screenshots/home.png" width="200" alt="Home"> | <img src="docs/screenshots/today.png" width="200" alt="Today"> | <img src="docs/screenshots/chat-meal-card.png" width="200" alt="Meal card in chat"> | <img src="docs/screenshots/chat-workout-card.png" width="200" alt="Workout card in chat"> | <img src="docs/screenshots/history.png" width="200" alt="History"> |
 
 ## How a message becomes a meal
 

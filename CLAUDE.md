@@ -138,13 +138,13 @@ The app should look like a tool someone designed on purpose, not a template.
   - `--accent: #0E6B47` Zoro Green, the only accent color
   - `--accent-soft: #E7F0ED`
   - `--danger: #B3261E` delete actions only
-- Logo: use the files in `frontend/src/assets/brand/` and `frontend/public/icons/`, never redrawn or recoloured. Green logo on white or Chalk; white logo on Zoro Green or Iron. The wordmark heads the phone layout, the symbol tops the desktop rail, the small-size symbol is Zoro's chat avatar, and the white stacked logo is the launch splash.
+- Logo: use the files in `frontend/src/assets/brand/` and `frontend/public/icons/`, never redrawn or recoloured. Green logo on white or Chalk; white logo on Zoro Green or Iron. The stacked logo heads Home, the wordmark heads the other phone screens, the symbol tops the desktop rail, the small-size symbol is Zoro's chat avatar, and the white stacked logo is the launch splash.
 - No purple anywhere. No gradients, glassmorphism, glows, or shadows heavier than `0 1px 2px rgba(0,0,0,.06)`.
 - Type: system font stack (`system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`). `font-variant-numeric: tabular-nums` on every number. Sizes 13 / 15 / 17 / 22 / 28 px.
 - Cards: white surface, 1px border, 8px radius, 16px padding. Food entries and workout suggestions in chat are cards, not chat bubbles.
 - Layout: bottom navigation under 768px, left rail at 768px and wider. Content max width 640px. Tap targets at least 44px. Respect iOS safe-area insets.
 - Icons: inline SVG or `lucide-react`, outline style, 20px. No emoji in the UI. No sparkle or magic-wand "AI" icons.
-- Copy: short and literal. Screen names are Today, Chat, History, Profile. No marketing words (unlock, supercharge, seamless, journey, empower, elevate). Zoro replies in one or two plain sentences, no emoji, at most one exclamation mark per conversation.
+- Copy: short and literal. Screen names are Home, Today, Chat, History, Profile. Home opens at launch and is reached from the logo; the nav keeps the other four. No marketing words (unlock, supercharge, seamless, journey, empower, elevate). Zoro replies in one or two plain sentences, no emoji, at most one exclamation mark per conversation.
 - Nutrition numbers are shown as estimates ("≈ 412 kcal") and every value on a card can be edited before saving.
 
 ## Code style
