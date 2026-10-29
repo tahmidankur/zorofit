@@ -6,12 +6,12 @@ from dataclasses import dataclass, field
 from sqlalchemy.orm import Session
 
 from app.models import ChatMessage, Profile, Proposal
-from app.services import meal_items, proposals, safety
+from app.services import meal_items, proposals, safety, workouts
+from app.services.meals import today_for
 from app.services.llm.base import Action, InterpretContext, Interpreter, InterpreterError
 from app.services.llm.prompts import PROMPT_VERSION
 
 FALLBACK_REPLY = "I couldn't read that one. You can add it by hand below."
-WORKOUT_LATER_REPLY = "Workout planning isn't ready yet. For now I can log your meals."
 NOTHING_PENDING = "There's no card waiting to be saved."
 MAX_CHAT_REPLY = 400
 
@@ -148,7 +148,17 @@ def handle_correct(turn: Turn, action: Action) -> None:
 
 
 def handle_plan_workout(turn: Turn, action: Action) -> None:
-    turn.replies.append(Reply(WORKOUT_LATER_REPLY))
+    profile = turn.profile
+    day = today_for(profile)
+    minutes = min(max(action.minutes or profile.session_minutes, 10), 120)
+    plan = workouts.plan_for(profile, day, minutes, action.focus)
+    proposals.discard_pending(turn.db, turn.device_id, kinds=("workout",))
+    proposal = proposals.create(
+        turn.db, turn.device_id, "workout", {"workout": plan, "local_date": day.isoformat()}, PROMPT_VERSION
+    )
+    is_training_day = day.weekday() in profile.training_days
+    what = "today's workout" if is_training_day else "a workout for today"
+    turn.replies.append(Reply(f"Here's a {minutes}-minute version of {what}.", proposal))
 
 
 def handle_action(turn: Turn, action: Action) -> None:

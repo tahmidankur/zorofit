@@ -3,32 +3,37 @@ import { api } from "../api.js";
 import { formatDay, formatKcal, round } from "../format.js";
 import MealList from "../components/MealList.jsx";
 import MealForm from "../components/MealForm.jsx";
+import WorkoutCard from "../components/WorkoutCard.jsx";
 import "./History.css";
 
-function groupByDay(meals) {
+function groupByDay(meals, workouts) {
   const days = new Map();
-  for (const meal of meals) {
-    if (!days.has(meal.local_date)) days.set(meal.local_date, []);
-    days.get(meal.local_date).push(meal);
-  }
-  return [...days.entries()].map(([date, dayMeals]) => ({
-    date,
-    meals: dayMeals,
-    kcal: dayMeals.reduce((sum, meal) => sum + meal.kcal, 0),
-    protein: dayMeals.reduce((sum, meal) => sum + meal.protein_g, 0),
-  }));
+  const day = (date) => {
+    if (!days.has(date)) days.set(date, { date, meals: [], workouts: [] });
+    return days.get(date);
+  };
+  meals.forEach((meal) => day(meal.local_date).meals.push(meal));
+  workouts.forEach((workout) => day(workout.local_date).workouts.push(workout));
+  return [...days.values()]
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
+    .map((group) => ({
+      ...group,
+      kcal: group.meals.reduce((sum, meal) => sum + meal.kcal, 0),
+      protein: group.meals.reduce((sum, meal) => sum + meal.protein_g, 0),
+    }));
 }
 
 export default function History() {
   const [meals, setMeals] = useState(null);
+  const [workouts, setWorkouts] = useState([]);
   const [error, setError] = useState("");
   const [editingId, setEditingId] = useState(null);
 
   const load = useCallback(() => {
-    return api
-      .listMeals()
-      .then((data) => {
-        setMeals(data);
+    return Promise.all([api.listMeals(), api.listWorkouts()])
+      .then(([mealData, workoutData]) => {
+        setMeals(mealData);
+        setWorkouts(workoutData);
         setError("");
       })
       .catch(() => setError("Can't reach the server."));
@@ -55,16 +60,27 @@ export default function History() {
         <h1 className="page-title">History</h1>
       </header>
       {error && <p className="empty">{error}</p>}
-      {meals && meals.length === 0 && <p className="empty">Nothing logged yet.</p>}
+      {meals && meals.length === 0 && workouts.length === 0 && <p className="empty">Nothing logged yet.</p>}
       {meals &&
-        groupByDay(meals).map((day) => (
+        groupByDay(meals, workouts).map((day) => (
           <section key={day.date} className="history-day">
             <div className="history-day-head">
               <h2 className="section-title">{formatDay(day.date)}</h2>
-              <p className="small muted num">
-                {formatKcal(day.kcal)} · {round(day.protein)} g protein
-              </p>
+              {day.meals.length > 0 && (
+                <p className="small muted num">
+                  {formatKcal(day.kcal)} · {round(day.protein)} g protein
+                </p>
+              )}
             </div>
+            {day.workouts.map((workout) => (
+              <div key={workout.id} className="history-workout">
+                <WorkoutCard
+                  plan={workout.exercises}
+                  title={`${workout.minutes_planned}-minute session`}
+                  status={workout.status}
+                />
+              </div>
+            ))}
             <MealList
               meals={day.meals}
               editingId={editingId}

@@ -65,6 +65,9 @@ export const api = {
   editProposal: (id, body) => apiFetch(`/api/proposals/${id}`, { method: "PUT", body }),
   confirmProposal: (id) => apiFetch(`/api/proposals/${id}/confirm`, { method: "POST" }),
   discardProposal: (id) => apiFetch(`/api/proposals/${id}/discard`, { method: "POST" }),
+  listWorkouts: () => apiFetch("/api/workouts"),
+  setWorkoutStatus: (id, status) => apiFetch(`/api/workouts/${id}/status`, { method: "PUT", body: { status } }),
+  listTemplates: () => apiFetch("/api/workouts/templates"),
 };
 
 export { browserTimezone };

@@ -1,0 +1,58 @@
+.workout-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.workout-card-discarded {
+  opacity: 0.6;
+}
+
+.workout-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.workout-card-title {
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.workout-card-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.workout-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: exercise;
+}
+
+.workout-exercise {
+  counter-increment: exercise;
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  column-gap: 8px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+
+.workout-exercise::before {
+  content: counter(exercise);
+  grid-row: span 2;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.workout-exercise-name {
+  font-weight: 500;
+}

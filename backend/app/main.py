@@ -7,7 +7,7 @@ from app import models  # noqa: F401  registers tables on Base.metadata
 from app.config import settings
 from app.db import Base, engine
 from app.food_data import prepare_food_db
-from app.routers import chat, foods, health, meals, profile, proposals, today
+from app.routers import chat, foods, health, meals, profile, proposals, today, workouts
 
 
 @asynccontextmanager
@@ -34,3 +34,4 @@ app.include_router(today.router)
 app.include_router(foods.router)
 app.include_router(chat.router)
 app.include_router(proposals.router)
+app.include_router(workouts.router)

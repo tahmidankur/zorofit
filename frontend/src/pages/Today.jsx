@@ -5,6 +5,7 @@ import { formatDay } from "../format.js";
 import ProgressBar from "../components/ProgressBar.jsx";
 import MealList from "../components/MealList.jsx";
 import MealForm from "../components/MealForm.jsx";
+import WorkoutCard from "../components/WorkoutCard.jsx";
 
 export default function Today() {
   const [today, setToday] = useState(null);
@@ -43,6 +44,11 @@ export default function Today() {
     await load();
   }
 
+  async function setWorkoutStatus(status) {
+    const workout = await api.setWorkoutStatus(today.workout.id, status);
+    setToday((current) => ({ ...current, workout }));
+  }
+
   if (error && !today) {
     return (
       <section>
@@ -75,6 +81,37 @@ export default function Today() {
       <div className="card">
         <ProgressBar label="Calories" value={today.totals.kcal} target={today.targets.kcal} unit="kcal" />
         <ProgressBar label="Protein" value={today.totals.protein_g} target={today.targets.protein_g} unit="g" />
+      </div>
+
+      <div className="section">
+        <div className="section-header">
+          <h2 className="section-title">Workout</h2>
+        </div>
+        {today.workout ? (
+          <WorkoutCard
+            plan={today.workout.exercises}
+            title={`${today.workout.minutes_planned}-minute session`}
+            status={today.workout.status}
+            actions={
+              today.workout.status === "planned" ? (
+                <>
+                  <button type="button" className="btn btn-primary" onClick={() => setWorkoutStatus("done")}>
+                    Done
+                  </button>
+                  <button type="button" className="btn" onClick={() => setWorkoutStatus("skipped")}>
+                    Skip
+                  </button>
+                </>
+              ) : (
+                <button type="button" className="btn btn-ghost" onClick={() => setWorkoutStatus("planned")}>
+                  Undo
+                </button>
+              )
+            }
+          />
+        ) : (
+          <p className="empty">Rest day. Ask Zoro in Chat if you want to train anyway.</p>
+        )}
       </div>
 
       <div className="section">

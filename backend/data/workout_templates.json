@@ -1,0 +1,372 @@
+[
+  {
+    "id": "full_body_a",
+    "name": "Full Body A",
+    "days": [
+      [
+        {
+          "pattern": "squat",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "push_horizontal",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "pull_horizontal",
+          "sets": 3,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 90,
+          "priority": 2
+        },
+        {
+          "pattern": "hinge",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 90,
+          "priority": 3
+        },
+        {
+          "pattern": "push_vertical",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 75,
+          "priority": 4
+        },
+        {
+          "pattern": "core",
+          "sets": 3,
+          "reps": {
+            "lose": "40 s",
+            "maintain": "30 s",
+            "gain": "30 s",
+            "strength": "30 s"
+          },
+          "rest_seconds": 45,
+          "priority": 5
+        },
+        {
+          "pattern": "carry",
+          "sets": 2,
+          "reps": {
+            "lose": "40 m",
+            "maintain": "30 m",
+            "gain": "30 m",
+            "strength": "30 m"
+          },
+          "rest_seconds": 60,
+          "priority": 6
+        }
+      ]
+    ]
+  },
+  {
+    "id": "full_body_b",
+    "name": "Full Body B",
+    "days": [
+      [
+        {
+          "pattern": "hinge",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "push_vertical",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "pull_vertical",
+          "sets": 3,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 90,
+          "priority": 2
+        },
+        {
+          "pattern": "lunge",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 90,
+          "priority": 3
+        },
+        {
+          "pattern": "push_horizontal",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 75,
+          "priority": 4
+        },
+        {
+          "pattern": "core",
+          "sets": 3,
+          "reps": {
+            "lose": "40 s",
+            "maintain": "30 s",
+            "gain": "30 s",
+            "strength": "30 s"
+          },
+          "rest_seconds": 45,
+          "priority": 5
+        }
+      ]
+    ]
+  },
+  {
+    "id": "upper_lower",
+    "name": "Upper / Lower",
+    "days": [
+      [
+        {
+          "pattern": "push_horizontal",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "pull_horizontal",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "push_vertical",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 90,
+          "priority": 2
+        },
+        {
+          "pattern": "pull_vertical",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 90,
+          "priority": 3
+        },
+        {
+          "pattern": "core",
+          "sets": 3,
+          "reps": {
+            "lose": "40 s",
+            "maintain": "30 s",
+            "gain": "30 s",
+            "strength": "30 s"
+          },
+          "rest_seconds": 45,
+          "priority": 4
+        }
+      ],
+      [
+        {
+          "pattern": "squat",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "hinge",
+          "sets": 4,
+          "reps": {
+            "lose": "10-12",
+            "maintain": "8-10",
+            "gain": "8-12",
+            "strength": "4-6"
+          },
+          "rest_seconds": 120,
+          "priority": 1
+        },
+        {
+          "pattern": "lunge",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 90,
+          "priority": 2
+        },
+        {
+          "pattern": "core",
+          "sets": 3,
+          "reps": {
+            "lose": "40 s",
+            "maintain": "30 s",
+            "gain": "30 s",
+            "strength": "30 s"
+          },
+          "rest_seconds": 45,
+          "priority": 3
+        },
+        {
+          "pattern": "carry",
+          "sets": 2,
+          "reps": {
+            "lose": "40 m",
+            "maintain": "30 m",
+            "gain": "30 m",
+            "strength": "30 m"
+          },
+          "rest_seconds": 60,
+          "priority": 4
+        }
+      ]
+    ]
+  },
+  {
+    "id": "bodyweight_quick",
+    "name": "Bodyweight Quick",
+    "days": [
+      [
+        {
+          "pattern": "squat",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 60,
+          "priority": 1
+        },
+        {
+          "pattern": "push_horizontal",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 60,
+          "priority": 1
+        },
+        {
+          "pattern": "lunge",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 60,
+          "priority": 2
+        },
+        {
+          "pattern": "hinge",
+          "sets": 3,
+          "reps": {
+            "lose": "12-15",
+            "maintain": "10-12",
+            "gain": "10-15",
+            "strength": "6-8"
+          },
+          "rest_seconds": 60,
+          "priority": 3
+        },
+        {
+          "pattern": "core",
+          "sets": 3,
+          "reps": {
+            "lose": "40 s",
+            "maintain": "30 s",
+            "gain": "30 s",
+            "strength": "30 s"
+          },
+          "rest_seconds": 30,
+          "priority": 4
+        }
+      ]
+    ]
+  }
+]

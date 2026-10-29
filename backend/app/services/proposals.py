@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session, selectinload
 from app.models import Meal, MealItem, Profile, Proposal, utcnow
 from app.schemas import MealItemIn, ProposalEdit, ProposalOut
 from app.services import meal_items
+from app.services.workouts import apply_workout_proposal
 from app.services.meals import build_items, new_meal
 
 DUPLICATE_WINDOW = timedelta(minutes=15)
@@ -219,6 +220,8 @@ def confirm(db: Session, profile: Profile, proposal_id: str) -> Proposal:
     elif proposal.kind == "meal_edit":
         edited_meal.items = build_items(_items_in(proposal.payload["items"]))
         edited_meal.label = proposal.payload.get("label")
+    elif proposal.kind == "workout":
+        apply_workout_proposal(db, profile, proposal)
     db.commit()
     db.refresh(proposal)
     return proposal

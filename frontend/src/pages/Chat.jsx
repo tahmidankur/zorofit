@@ -3,6 +3,7 @@ import { ArrowUp } from "lucide-react";
 import { api } from "../api.js";
 import MealCard from "../components/MealCard.jsx";
 import MealForm from "../components/MealForm.jsx";
+import WorkoutCard from "../components/WorkoutCard.jsx";
 import "./Chat.css";
 
 function useOnline() {
@@ -36,6 +37,40 @@ function Fallback({ query }) {
   );
 }
 
+function WorkoutProposal({ proposal, onUpdate }) {
+  const [busy, setBusy] = useState(false);
+
+  async function run(request) {
+    setBusy(true);
+    try {
+      onUpdate(await request());
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const plan = proposal.workout;
+  return (
+    <WorkoutCard
+      plan={plan}
+      title={`${plan.minutes_planned}-minute workout`}
+      status={proposal.status}
+      actions={
+        proposal.status === "pending" && (
+          <>
+            <button type="button" className="btn btn-primary" disabled={busy} onClick={() => run(() => api.confirmProposal(proposal.id))}>
+              Use this
+            </button>
+            <button type="button" className="btn btn-ghost" disabled={busy} onClick={() => run(() => api.discardProposal(proposal.id))}>
+              Discard
+            </button>
+          </>
+        )
+      }
+    />
+  );
+}
+
 function Message({ message, showCard, onProposal }) {
   if (message.role === "user") {
     return (
@@ -50,6 +85,9 @@ function Message({ message, showCard, onProposal }) {
       <p className="chat-zoro-text">{message.text}</p>
       {showCard && message.proposal.kind !== "workout" && (
         <MealCard proposal={message.proposal} onUpdate={(proposal) => onProposal(proposal)} />
+      )}
+      {showCard && message.proposal.kind === "workout" && (
+        <WorkoutProposal proposal={message.proposal} onUpdate={onProposal} />
       )}
       {message.fallback_query && <Fallback query={message.fallback_query} />}
     </li>
@@ -93,12 +131,15 @@ export default function Chat() {
       const replies = await api.sendChat(message);
       // A reply can change an earlier card: a typed "yes" saves it, a new meal replaces it.
       const updated = new Map(replies.filter((m) => m.proposal).map((m) => [m.proposal.id, m.proposal]));
-      const opensMealCard = replies.some((m) => m.proposal?.kind === "meal" && m.proposal.status === "pending");
+      const opens = (kind) => replies.some((m) => m.proposal?.kind === kind && m.proposal.status === "pending");
+      const opensMealCard = opens("meal");
+      const opensWorkoutCard = opens("workout");
       setMessages((current) => [
         ...current.map((m) => {
           if (!m.proposal) return m;
           if (updated.has(m.proposal.id)) return { ...m, proposal: updated.get(m.proposal.id) };
-          if (opensMealCard && m.proposal.status === "pending" && m.proposal.kind !== "workout") {
+          const replaced = m.proposal.kind === "workout" ? opensWorkoutCard : opensMealCard;
+          if (replaced && m.proposal.status === "pending") {
             return { ...m, proposal: { ...m.proposal, status: "discarded" } };
           }
           return m;

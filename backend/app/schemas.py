@@ -150,11 +150,32 @@ class Targets(BaseModel):
     protein_g: float
 
 
+class WorkoutOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    local_date: date
+    template_id: str
+    minutes_planned: int
+    status: Literal["planned", "done", "skipped"]
+    exercises: dict
+
+
+class WorkoutStatusIn(BaseModel):
+    status: Literal["planned", "done", "skipped"]
+
+
+class TemplateOut(BaseModel):
+    id: str
+    name: str
+
+
 class TodayOut(BaseModel):
     date: date
     targets: Targets
     totals: Totals
     meals: list[MealOut]
+    workout: WorkoutOut | None = None
 
 
 class PortionChoice(BaseModel):

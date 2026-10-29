@@ -98,3 +98,17 @@ class ChatMessage(Base):
     text: Mapped[str] = mapped_column(String(2000))
     proposal_id: Mapped[str | None] = mapped_column(ForeignKey("proposals.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow, index=True)
+
+
+class Workout(Base):
+    __tablename__ = "workouts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    device_id: Mapped[str] = mapped_column(String(36), index=True)
+    local_date: Mapped[date] = mapped_column(Date, index=True)
+    template_id: Mapped[str] = mapped_column(String(40))
+    minutes_planned: Mapped[int] = mapped_column(Integer)
+    status: Mapped[str] = mapped_column(String(10), default="planned")
+    # The generator's full output (exercises, estimate, skipped patterns), so history never shifts.
+    exercises: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)

@@ -57,6 +57,7 @@ export default function Profile() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [templates, setTemplates] = useState([]);
   const timezone = browserTimezone();
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export default function Profile() {
       .getProfile()
       .then(setForm)
       .catch(() => setError("Can't reach the server."));
+    api.listTemplates().then(setTemplates).catch(() => setTemplates([]));
   }, []);
 
   function update(changes) {
@@ -199,6 +201,16 @@ export default function Profile() {
               onChange={(days) => update({ training_days: [...days].sort() })}
             />
           </div>
+          <label className="field profile-minutes">
+            <span className="field-label">Workout template</span>
+            <select className="input" value={form.template_id} onChange={(e) => update({ template_id: e.target.value })}>
+              {templates.map((template) => (
+                <option key={template.id} value={template.id}>
+                  {template.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <label className="field profile-minutes">
             <span className="field-label">Usual session, minutes (15–90)</span>
             <input
