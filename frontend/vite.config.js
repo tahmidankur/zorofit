@@ -12,7 +12,7 @@ export default defineConfig({
         name: "ZoroFit",
         short_name: "ZoroFit",
         description: "Log meals and plan workouts by chatting with Zoro.",
-        start_url: "/today",
+        start_url: "/",
         scope: "/",
         display: "standalone",
         orientation: "portrait",
