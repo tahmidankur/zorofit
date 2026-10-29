@@ -9,8 +9,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["icons/favicon.svg", "icons/apple-touch-icon.png"],
       manifest: {
-        name: "Lift & Fuel",
-        short_name: "Lift & Fuel",
+        name: "ZoroFit",
+        short_name: "ZoroFit",
         description: "Log meals and plan workouts by chatting with Zoro.",
         start_url: "/today",
         scope: "/",

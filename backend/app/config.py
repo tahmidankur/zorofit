@@ -32,7 +32,7 @@ def normalize_database_url(url: str) -> str:
 
 def load_settings() -> Settings:
     return Settings(
-        database_url=normalize_database_url(os.getenv("DATABASE_URL", "sqlite:///./liftfuel.db")),
+        database_url=normalize_database_url(os.getenv("DATABASE_URL", "sqlite:///./zorofit.db")),
         frontend_origins=[
             origin.strip().rstrip("/")
             for origin in os.getenv("FRONTEND_ORIGIN", "http://localhost:5173").split(",")

@@ -1,7 +1,7 @@
 # Render Blueprint: the API and the static frontend. The database lives on Neon (see README).
 services:
   - type: web
-    name: lift-and-fuel-api
+    name: zorofit-api
     runtime: python
     plan: free
     rootDir: backend
@@ -29,7 +29,7 @@ services:
         value: "40"
 
   - type: web
-    name: lift-and-fuel-web
+    name: zorofit-web
     runtime: static
     rootDir: frontend
     buildCommand: npm ci && npm run build

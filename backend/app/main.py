@@ -16,7 +16,7 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="Lift & Fuel", lifespan=lifespan)
+app = FastAPI(title="ZoroFit", lifespan=lifespan)
 
 # The frontend runs on its own origin and sends X-Device-Id, which needs an explicit allow.
 # FRONTEND_ORIGIN may list several origins, comma-separated (for example the site and a local preview).

@@ -24,4 +24,4 @@ def test_migrations_build_the_same_schema_as_the_models(tmp_path):
 def test_postgres_urls_use_psycopg_driver():
     assert normalize_database_url("postgres://u:p@host/db") == "postgresql+psycopg://u:p@host/db"
     assert normalize_database_url("postgresql://u:p@host/db?sslmode=require") == "postgresql+psycopg://u:p@host/db?sslmode=require"
-    assert normalize_database_url("sqlite:///./liftfuel.db") == "sqlite:///./liftfuel.db"
+    assert normalize_database_url("sqlite:///./zorofit.db") == "sqlite:///./zorofit.db"
