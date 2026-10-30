@@ -8,10 +8,6 @@ export function formatKcal(value) {
   return `≈ ${round(value)} kcal`;
 }
 
-export function formatProtein(value) {
-  return `${round(value)} g protein`;
-}
-
 export function parseLocalDate(isoDate) {
   const [year, month, day] = isoDate.split("-").map(Number);
   return new Date(year, month - 1, day);
